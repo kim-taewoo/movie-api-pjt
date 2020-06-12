@@ -208,3 +208,33 @@ class ReviewDetailAPI(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class LikeReview(APIView):
+
+    def get(self, request, review_id):
+        user = request.user
+        review = get_review(review_id)
+        if not review:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if user in review.likes.all():
+            review.likes.remove(user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            review.likes.add(user)
+            return Response(status=status.HTTP_201_CREATED)
+
+
+class UnlikeReview(APIView):
+
+    def get(self, request, review_id):
+        user = request.user
+        review = get_review(review_id)
+        if not review:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        if user in review.unlikes.all():
+            review.unlikes.remove(user)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            review.unlikes.add(user)
+            return Response(status=status.HTTP_201_CREATED)
