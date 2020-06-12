@@ -7,8 +7,23 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from django.conf import settings
-from .models import Movie, Actor, Director, Genre, Country
-from .serializers import MovieSerializer
+from .models import Movie, Actor, Director, Genre, Country, Review
+from .serializers import MovieSerializer, ReviewSerializer
+
+
+def get_movie(movie_id):
+    try:
+        movie = Movie.objects.get(id=movie_id)
+        return movie
+    except Movie.DoesNotExist:
+        return None
+
+def get_review(review_id):
+    try:
+        review = Review.objects.get(id=review_id)
+        return review
+    except Review.DoesNotExist:
+        return None
 
 
 # Create your views here.
@@ -149,11 +164,61 @@ class MovieDetailAPI(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, movie_id):
-        try:
-            movie = Movie.objects.get(id=movie_id)
-        except Movie.DoesNotExist:
+        movie = get_movie(movie_id)
+        if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
         serializer = MovieSerializer(movie)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+class ReviewDetail(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, movie_id):
+        user = request.user
+        movie = get_movie(movie_id)
+        reviews = movie.reviews
+        serializer = ReviewSerializer(reviews, many=True, context={"request":request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+
+    def post(self, request, movie_id):
+        user = request.user
+        movie = get_movie(movie_id)
+        if not movie:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ReviewSerializer(data=request.data, context={"request":request})
+
+        if serializer.is_valid():
+            review = serializer.save(creator=user, movie=movie)
+            if review:
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class ReviewDetailAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def put(self, request, review_id):
+        user = request.user
+        review = get_review(review_id)
+        if not review:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = ReviewSerializer(reviews, data=request.data, context={"request":request})
+        if serializer.is_valid():
+            review = serializer.save()
+            if review:
+                return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+
+    def delete(self, request, review_id):
+        user = request.user
+        review = get_review(review_id)
+        if not review:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

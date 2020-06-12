@@ -60,3 +60,15 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='liked_reviews')
     unlikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='unliked_reviews')
+
+    @property
+    def likes_count(self):
+        return self.likes.count()
+    
+    @property
+    def unlikes_count(self):
+        return self.unlikes.count()
+
+    @property
+    def formatted_time(self):
+        return self.created_at
