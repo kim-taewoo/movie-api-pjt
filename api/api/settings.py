@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import environ
+
+environ.Env.read_env()
+env = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -165,3 +169,11 @@ REST_FRAMEWORK = {
 SITE_ID = 1
 
 AUTH_USER_MODEL = 'users.User'
+
+
+# API_KEYS
+
+NAVER_ID = env('NAVER_ID')
+NAVER_SECRET = env('NAVER_SECRET')
+TMDB_KEY = env('TMDB_KEY')
+KOBIS_KEY = env('KOBIS_KEY')
