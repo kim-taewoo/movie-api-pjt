@@ -4,7 +4,7 @@ from .models import User
 from rest_framework import status
 # from pprint import pprint
 
-class ProblemTest(APITestCase):
+class UserTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
         
