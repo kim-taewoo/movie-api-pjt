@@ -1,3 +1,62 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
+
+class Movie(models.Model):
+    title = models.CharField(max_length=255)
+    sub_title = models.CharField(max_length=255, null=True, blank=True)
+    poster = models.URLField(max_length=200)
+    rating = models.FloatField()
+    pub_date = models.CharField(max_length=100)
+    runtime = models.IntegerField()
+    popularity = models.IntegerField()
+    overview = models.TextField()
+    vote_count = models.IntegerField()
+    adult = models.BooleanField()
+
+    def __str__(self):
+        return self.title
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=255)
+    movie = models.ManyToManyField(Movie, blank=True, related_name='genres')
+
+    def __str__(self):
+        return self.name
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=255)
+    movie = models.ManyToManyField(Movie, blank=True, related_name='countries')
+
+    def __str__(self):
+        return self.name
+
+
+class Actor(models.Model):
+    name = models.CharField(max_length=255)
+    movie = models.ManyToManyField(Movie, blank=True, related_name='actors')
+
+    def __str__(self):
+        return self.name
+
+
+class Director(models.Model):
+    name = models.CharField(max_length=255)
+    movie = models.ManyToManyField(Movie, blank=True, related_name='directors')
+
+    def __str__(self):
+        return self.name
+
+
+class Review(models.Model):
+    rating = models.IntegerField()
+    content = models.TextField()
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='liked_reviews')
+    unlikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='unliked_reviews')
