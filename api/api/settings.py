@@ -157,10 +157,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Rest Framework
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ]
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.BasicAuthentication',
+    ),
 }
 
 
@@ -169,6 +173,9 @@ REST_FRAMEWORK = {
 SITE_ID = 1
 
 AUTH_USER_MODEL = 'users.User'
+
+REST_USE_JWT = True
+ACCOUNT_LOGOUT_ON_GET = True
 
 
 # API_KEYS
