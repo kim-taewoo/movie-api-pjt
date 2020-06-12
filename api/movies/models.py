@@ -8,12 +8,12 @@ class Movie(models.Model):
     sub_title = models.CharField(max_length=255, null=True, blank=True)
     poster = models.URLField(max_length=200)
     rating = models.FloatField()
-    pub_date = models.CharField(max_length=100)
+    pub_date = models.DateField()
     runtime = models.IntegerField()
-    popularity = models.IntegerField()
     overview = models.TextField()
-    vote_count = models.IntegerField()
-    adult = models.BooleanField()
+    audits = models.CharField(max_length=255)
+    movie_cd = models.IntegerField()
+    audi_cnt = models.IntegerField()
 
     def __str__(self):
         return self.title
@@ -29,7 +29,7 @@ class Genre(models.Model):
 
 class Country(models.Model):
     name = models.CharField(max_length=255)
-    movie = models.ManyToManyField(Movie, blank=True, related_name='countries')
+    movie = models.ManyToManyField(Movie, blank=True, related_name='nations')
 
     def __str__(self):
         return self.name
