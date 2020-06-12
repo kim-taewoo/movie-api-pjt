@@ -170,6 +170,8 @@ class ReviewAPI(APIView):
     def get(self, request, movie_id):
         user = request.user
         movie = get_movie(movie_id)
+        if not movie:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         reviews = movie.reviews
         serializer = ReviewSerializer(reviews, many=True, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
