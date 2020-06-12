@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from django.conf import Settings
+from django.conf import settings
 
-User = settins.AUTH_USER_MODEL
+User = settings.AUTH_USER_MODEL
 
 class UserSerializer(serializers.ModelSerializer):
 
