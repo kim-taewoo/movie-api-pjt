@@ -29,8 +29,7 @@ def get_review(review_id):
 # Create your views here.
 
 class MovieAPI(APIView):
-    permission_classes = [AllowAny]
-
+    
     def get_kobis_url(self, key, movieCd):
         KOBIS_DETAIL_URL = f'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key={key}&movieCd={movieCd}'
         return KOBIS_DETAIL_URL
@@ -39,19 +38,15 @@ class MovieAPI(APIView):
         NAVER_URL = f'https://openapi.naver.com/v1/search/movie.json?query={query}'
         return NAVER_URL
 
-
     def get(self, request):
         order_by = request.GET.get('order_by', None)
         if order_by:
             movies = Movie.objects.order_by(order_by)[:10]
         else:
             movies = Movie.objects.all()[:10]
-
         serializer = MovieSerializer(movies, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    
     def post(self, request):
 
         NAVER_ID = settings.NAVER_ID
@@ -161,20 +156,17 @@ class MovieAPI(APIView):
 
 
 class MovieDetailAPI(APIView):
-    permission_classes = [AllowAny]
-
+    
     def get(self, request, movie_id):
         movie = get_movie(movie_id)
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
         serializer = MovieSerializer(movie)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ReviewDetail(APIView):
-    permission_classes = [AllowAny]
-
+class ReviewAPI(APIView):
+    
     def get(self, request, movie_id):
         user = request.user
         movie = get_movie(movie_id)
@@ -182,24 +174,20 @@ class ReviewDetail(APIView):
         serializer = ReviewSerializer(reviews, many=True, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
         
-
     def post(self, request, movie_id):
         user = request.user
         movie = get_movie(movie_id)
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = ReviewSerializer(data=request.data, context={"request":request})
-
         if serializer.is_valid():
             review = serializer.save(creator=user, movie=movie)
             if review:
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class ReviewDetailAPI(APIView):
-    permission_classes = [AllowAny]
 
     def put(self, request, review_id):
         user = request.user
@@ -211,10 +199,8 @@ class ReviewDetailAPI(APIView):
             review = serializer.save()
             if review:
                 return Response(serializer.data, status=status.HTTP_200_OK)
-        
         return Response(status=status.HTTP_400_BAD_REQUEST)
         
-
     def delete(self, request, review_id):
         user = request.user
         review = get_review(review_id)

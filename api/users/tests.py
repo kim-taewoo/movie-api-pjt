@@ -1,8 +1,6 @@
-from django.urls import reverse
 from rest_framework.test import APITestCase, APIClient
 from .models import User
 from rest_framework import status
-# from pprint import pprint
 
 class UserTest(APITestCase):
     def setUp(self):

@@ -66,7 +66,7 @@ class MiniMovieSerializer(serializers.ModelSerializer):
         )
 
 
-class ReviewSerializer(serializer.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     creator = UserSerializer(read_only=True)
     movie = MiniMovieSerializer(read_only=True)
     is_liked = serializers.SerializerMethodField()
