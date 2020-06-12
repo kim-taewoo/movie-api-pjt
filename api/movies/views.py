@@ -144,3 +144,16 @@ class MovieAPI(APIView):
 
         return Response(status=status.HTTP_201_CREATED)
 
+
+class MovieDetailAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, movie_id):
+        try:
+            movie = Movie.objects.get(id=movie_id)
+        except Movie.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = MovieSerializer(movie)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
