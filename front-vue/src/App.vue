@@ -8,18 +8,22 @@
         </h2>
         <v-divider></v-divider>
         <v-list-item-group v-model="item" color="white">
-          <v-list-item link v-for="(item, i) in drawerItems" :key="i">
+          <v-list-item exact :to="item.link" link v-for="(item, i) in drawerItems" :key="i">
             <v-list-item-action>
               <v-icon>{{item.icon}}</v-icon>
             </v-list-item-action>
             <v-list-item-content>
-              <router-link :to="item.link" >
-                <v-list-item-title>{{item.name}}</v-list-item-title>
-              </router-link>
+              <v-list-item-title>{{item.name}}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
+
+      <template v-slot:append>
+        <div class="pa-2 mb-5">
+          <v-btn block>LOGIN<v-icon right dark>mdi-key</v-icon></v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-left dense flat>
@@ -72,7 +76,7 @@ export default {
         link: '/'
       },
       {
-        name: '상영작·예정작',
+        name: '모든 영화',
         icon: 'mdi-movie-outline',
         link: '/movies'
       },
