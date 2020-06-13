@@ -22,11 +22,6 @@ const routes = [
     name: 'MovieDetail',
     component: MovieDetail,
   },
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home,
-  // },
 ];
 
 const router = new VueRouter({

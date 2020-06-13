@@ -1,9 +1,11 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" sm="6" offset-sm="3">
+      <v-col cols="12" sm="6">
         <ImageGallery />
-        <Trailers class="mt-4" />
+      </v-col>
+      <v-col cols="12" sm="6">
+        <Trailers class="mt-3 mt-sm-0" />
       </v-col>
     </v-row>
   </div>

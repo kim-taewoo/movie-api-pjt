@@ -1,9 +1,9 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="12" sm="6" offset-sm="3">
-        <v-card color="#eeeeee" light class="pa-2">
-          <h2 class="ma-2 display-1 font-weight-thin">All Movies</h2>
+      <v-col cols="12" sm="8" offset-sm="2">
+        <v-card light class="pa-2">
+          <h2 class="ma-2 display-1 font-weight-light">All Movies</h2>
           <MovieFilter />
           <MovieList class="mt-2" />
         </v-card>

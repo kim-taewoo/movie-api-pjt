@@ -4,7 +4,9 @@
       <v-list shaped>
         <!-- <v-subheader>Menu</v-subheader> -->
         <h2 class="text-center my-3">
-          <v-icon style="margin-top:-10px;">mdi-movie-open-outline</v-icon><span class="red--text ml-1">무비</span>모아
+          <router-link to="/">
+            <v-icon style="margin-top:-10px;">mdi-movie-open-outline</v-icon><span class="red--text ml-1">무비</span>모아
+          </router-link>
         </h2>
         <v-divider></v-divider>
         <v-list-item-group v-model="item" color="white">
@@ -21,7 +23,7 @@
 
       <template v-slot:append>
         <div class="pa-2 mb-5">
-          <v-btn block>LOGIN<v-icon right dark>mdi-key</v-icon></v-btn>
+          <v-btn block @click.stop="loginDialog=true">LOGIN<v-icon right dark>mdi-key</v-icon></v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -40,6 +42,33 @@
         color="red"
       ></v-text-field>
     </v-app-bar>
+
+    <v-dialog v-model="loginDialog" persistent max-width="450px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">LOGIN</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12" class="pa-0">
+                <v-text-field color="pink lighten-3" shaped outlined label="ID*" required></v-text-field>
+              </v-col>
+              <v-col cols="12" class="pa-0">
+                <v-text-field color="pink lighten-3" shaped outlined label="Password*" type="password" required></v-text-field>
+              </v-col>
+              
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="pink lighten-1" text @click="loginDialog = false">회원가입</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn color="pink lighten-3" text @click="loginDialog = false">취소</v-btn>
+          <v-btn color="pink lighten-3" text @click="loginDialog = false">확인</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <v-content>
       <v-container class="fill-height" fluid>
@@ -68,6 +97,7 @@ export default {
   },
   data: () => ({
     drawer: null,
+    loginDialog: false,
     item: 0,
     drawerItems: [
       {
@@ -80,11 +110,11 @@ export default {
         icon: 'mdi-movie-outline',
         link: '/movies'
       },
-      {
-        name: '랭킹',
-        icon: 'mdi-trophy-outline',
-        link: '/rankings'
-      }
+      // {
+      //   name: '랭킹',
+      //   icon: 'mdi-trophy-outline',
+      //   link: '/rankings'
+      // }
     ]
   }),
   created() {
@@ -94,8 +124,8 @@ export default {
 </script>
 
 <style>
-a {
+.v-application a {
+  text-decoration: none;
   color: white !important;
-  text-decoration: none; /* no underline */
 }
 </style>

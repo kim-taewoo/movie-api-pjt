@@ -1,39 +1,15 @@
 <template>
   <v-card class="pa-4" light>
-    <v-row>
+    <!-- <v-row>
       <v-col class="pb-0" cols="12">
         <h1 class="display-2 font-weight-thin">Movie Title</h1>
         <hr class="my-3" />
       </v-col>
-    </v-row>
+    </v-row> -->
 
     <v-row>
       <v-col class="py-0" cols="12">
-        <v-chip label class="ma-2" color="indigo" text-color="white">
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          Ranee
-        </v-chip>
-        <v-chip label class="ma-2" color="indigo" text-color="white">
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          Ranee
-        </v-chip>
-        <v-chip label class="ma-2" color="indigo" text-color="white">
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          Ranee
-        </v-chip>
-        <v-chip label class="ma-2" color="indigo" text-color="white">
-          <v-avatar left>
-            <v-icon>mdi-account-circle</v-icon>
-          </v-avatar>
-          Ranee
-        </v-chip>
-        <v-chip label class="ma-2" color="indigo" text-color="white">
+        <v-chip label class="ma-1" color="indigo" text-color="white">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
@@ -45,7 +21,31 @@
           </v-avatar>
           Ranee
         </v-chip>
-        <v-chip label class="ma-2" color="indigo" text-color="white">
+        <v-chip label class="ma-1" color="indigo" text-color="white">
+          <v-avatar left>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          Ranee
+        </v-chip>
+        <v-chip label class="ma-1" color="indigo" text-color="white">
+          <v-avatar left>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          Ranee
+        </v-chip>
+        <v-chip label class="ma-1" color="indigo" text-color="white">
+          <v-avatar left>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          Ranee
+        </v-chip>
+        <v-chip label class="ma-1" color="indigo" text-color="white">
+          <v-avatar left>
+            <v-icon>mdi-account-circle</v-icon>
+          </v-avatar>
+          Ranee
+        </v-chip>
+        <v-chip label class="ma-1" color="indigo" text-color="white">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>

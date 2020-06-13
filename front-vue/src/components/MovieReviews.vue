@@ -9,16 +9,22 @@
     </v-row>
     <hr>
     <v-row>
-      <v-col cols="12">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Possimus facilis ad tempore, ipsam laborum libero itaque similique odit praesentium soluta molestiae dolore sunt! Harum consequatur labore molestias omnis illum commodi.
+      <v-col cols="12" sm="6" class="pb-1">
+        <MovieReviewItem />
+      </v-col>
+      <v-col cols="12" sm="6" class="py-1">
+        <MovieReviewItem />
       </v-col>
     </v-row>
   </v-card>
 </template>
 
 <script>
+import MovieReviewItem from '@/components/MovieReviewItem'
 export default {
-
+  components: {
+    MovieReviewItem
+  }
 }
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col class="py-1" v-for="(item, i) in items" :key="i" cols="12">
-      <v-card style="overflow:hidden" light>
+      <v-card outlined style="overflow:hidden" light>
         <div class="d-flex flex-no-wrap justify-start">
           <v-avatar size="130" tile>
             <v-img :src="item.src"></v-img>
