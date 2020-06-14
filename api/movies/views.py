@@ -59,14 +59,19 @@ class MovieAPI(APIView):
             'X-Naver-Client-Secret': NAVER_SECRET,
         }
 
-        for y in range(1):
-            for m in range(7):
+        year = 1
+        month = 2
 
-                KOBIS_URL = f'http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&targetDt=20200{m}01'
+        for y in range(0, year):
+            for m in range(1, month):
+
+                KOBIS_URL = f'http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&targetDt=202{y}0{m}01'
                 
                 response = requests.get(KOBIS_URL)
 
-                results = response.json()['boxOfficeResult']['dailyBoxOfficeList']
+                tmp = response.json()
+                
+                results = tmp['boxOfficeResult']['dailyBoxOfficeList']
 
                 for result in results[:2]:
                     movie_cd = result['movieCd']
