@@ -10,7 +10,7 @@
         dense
         readonly
       ></v-rating>
-      {{rating}}
+      {{ rating }}
     </div>
     <v-card-text class="py-1">
       If you enjoy using Vuetify, please take a few seconds to rate your
@@ -18,16 +18,14 @@
     </v-card-text>
     <v-card-actions class="py-0">
       <v-list-item class="py-0">
-
         <v-list-item-content>
           <v-list-item-title>Evan You</v-list-item-title>
         </v-list-item-content>
 
-        <v-row
-          align="center"
-          justify="end"
-        >
-          <v-icon class="mr-1">mdi-heart</v-icon>
+        <v-row align="center" justify="end">
+          <v-btn icon color="pink" class="mr-1">
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
           <span class="subheading mr-2">256</span>
         </v-row>
       </v-list-item>

@@ -7,27 +7,65 @@
         </h2>
       </v-col>
     </v-row>
-    <hr>
+    <hr />
     <v-row>
-      <v-col cols="12" sm="6" class="pb-1">
+      <v-col cols="12" sm="6" class="py-1">
+        <MovieReviewItem />
+      </v-col>
+      <v-col cols="12" sm="6" class="py-1">
+        <MovieReviewItem />
+      </v-col>
+      <v-col cols="12" sm="6" class="py-1">
         <MovieReviewItem />
       </v-col>
       <v-col cols="12" sm="6" class="py-1">
         <MovieReviewItem />
       </v-col>
     </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-card outlined>
+          <v-card-text class="pb-1">
+            <div>
+              <v-text-field
+                label="나의 감상평"
+                single-line
+                outlined
+              ></v-text-field>
+            </div>
+            <div class="text-center">
+              <v-rating
+                v-model="rating"
+                color="yellow darken-3"
+                background-color="grey darken-1"
+                empty-icon="$ratingFull"
+                half-increments
+                hover
+              ></v-rating>
+              나의 평점: {{ rating }}
+            </div>
+          </v-card-text>
+          <v-card-actions class="justify-center">
+            <v-btn block color="pink" dark>리뷰 남기기</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
 
 <script>
-import MovieReviewItem from '@/components/MovieReviewItem'
+import MovieReviewItem from '@/components/MovieReviewItem';
 export default {
   components: {
-    MovieReviewItem
-  }
-}
+    MovieReviewItem,
+  },
+  data() {
+    return {
+      rating: 5,
+    };
+  },
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

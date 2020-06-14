@@ -30,9 +30,9 @@
 
       <template v-slot:append>
         <div class="pa-2 mb-5">
-          <v-btn block @click.stop="loginDialog = true"
-            >LOGIN<v-icon right dark>mdi-key</v-icon></v-btn
-          >
+          <v-btn block to="/login">
+            LOGIN<v-icon right dark>mdi-key</v-icon>
+          </v-btn>
         </div>
       </template>
     </v-navigation-drawer>
@@ -52,52 +52,7 @@
       ></v-text-field>
     </v-app-bar>
 
-    <v-dialog v-model="loginDialog" persistent max-width="450px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">LOGIN</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12" class="pa-0">
-                <v-text-field
-                  v-model="loginData.username"
-                  color="pink lighten-3"
-                  shaped
-                  outlined
-                  label="ID*"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" class="pa-0">
-                <v-text-field
-                  v-model="loginData.password"
-                  color="pink lighten-3"
-                  shaped
-                  outlined
-                  label="Password*"
-                  type="password"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-btn color="pink lighten-1" text @click="loginDialog = false"
-            >회원가입</v-btn
-          >
-          <v-spacer></v-spacer>
-          <v-btn color="pink lighten-3" text @click="loginDialog = false"
-            >취소</v-btn
-          >
-          <v-btn color="pink lighten-3" text @click="login(loginData)"
-            >확인</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    
 
     <v-content>
       <v-container class="fill-height" fluid>
@@ -112,7 +67,6 @@
     <v-footer>
       <v-row align="center" justify="center">
         <v-col class="text-right">
-          <v-btn @click="test">TEST</v-btn>
           <span>&copy; 2020 정형수 | 김태우</span>
         </v-col>
       </v-row>
@@ -130,10 +84,6 @@ export default {
     drawer: null,
     loginDialog: false,
     item: 0,
-    loginData: {
-      username: null,
-      password: null,
-    },
     drawerItems: [
       {
         name: '홈',
@@ -153,13 +103,13 @@ export default {
     ],
   }),
   methods: {
-    ...mapActions(['fetchMovies', 'initiateMoviesDB', 'login']),
+    ...mapActions(['fetchMovies', 'initiateMoviesDB']),
 
-    test() {
-      this.initiateMoviesDB()
-        .then((res) => console.log(res))
-        .catch(err => console.log(err))
-    },
+    // test() {
+    //   this.initiateMoviesDB()
+    //     .then((res) => console.log(res))
+    //     .catch(err => console.log(err))
+    // },
   },
   created() {
     this.$vuetify.theme.dark = true;

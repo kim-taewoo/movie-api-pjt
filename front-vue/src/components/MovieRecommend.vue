@@ -3,7 +3,9 @@
     <v-card-title class="pa-0">Ai 추천</v-card-title>
     <v-row dense>
       <v-col v-for="(card, idx) in cards" :key="idx" cols="3">
-        <v-card light>
+        <v-hover v-slot:default="{ hover }">
+        <v-card class="recommendItem" :elevation="hover ? 12 : 2"
+            :class="{ 'on-hover': hover }" light>
           <v-img
             :src="card.src"
             class="white--text align-end"
@@ -13,6 +15,7 @@
             <v-card-title v-text="card.title"></v-card-title>
           </v-img>
         </v-card>
+        </v-hover>
       </v-col>
     </v-row>
   </v-card>
@@ -47,5 +50,14 @@ data: () => ({
 .v-application a {
   text-decoration: none !important;
   color: white;
+}
+
+.recommendItem {
+  transition: opacity 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.recommendItem:not(.on-hover) {
+  opacity: 0.85;
 }
 </style>

@@ -15,27 +15,38 @@
                 class="d-flex child-flex pa-1"
                 cols="4"
               >
-                <v-card flat tile class="d-flex">
-                  <v-img
-                    :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                    :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-                    aspect-ratio="1.0"
-                    class="grey lighten-2"
+                <v-hover v-slot:default="{ hover }">
+                  <v-card
+                    flat
+                    tile
+                    class="d-flex galleryItem"
+                    :elevation="hover ? 12 : 2"
+                    :class="{ 'on-hover': hover }"
+                    :to="{name: 'MovieDetail', params: {id:n}}"
                   >
-                    <template v-slot:placeholder>
-                      <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                      >
-                        <v-progress-circular
-                          indeterminate
-                          color="grey lighten-5"
-                        ></v-progress-circular>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
+                    <v-img
+                      :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
+                      :lazy-src="
+                        `https://picsum.photos/10/6?image=${n * 5 + 10}`
+                      "
+                      aspect-ratio="1.0"
+                      class="grey lighten-2"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          ></v-progress-circular>
+                        </v-row>
+                      </template>
+                    </v-img>
+                  </v-card>
+                </v-hover>
               </v-col>
             </v-row>
           </v-container>
@@ -57,5 +68,14 @@ export default {
 <style>
 .v-tab--active {
   color: black !important;
+}
+
+.galleryItem {
+  transition: opacity 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.galleryItem:not(.on-hover) {
+  opacity: 0.85;
 }
 </style>

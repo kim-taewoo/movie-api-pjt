@@ -100,7 +100,8 @@ class MovieAPI(APIView):
                         runtime = movie_results['showTm']
                         pub_date = dt[:4] + '-' + dt[4:6] + '-' + dt[6:]
                         overview = ''
-                        naver_response = requests.get(self.get_naver_url(title), headers=naver_headers).json()['items'][0]
+                        naver_response = requests.get(self.get_naver_url(
+                            title), headers=naver_headers).json()['items'][0]
                         rating = naver_response['userRating']
                         poster = naver_response['image']
                         link_url = naver_response['link'].strip()

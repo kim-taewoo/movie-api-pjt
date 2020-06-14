@@ -6,10 +6,10 @@
       </v-col>
       <v-col cols="12" sm="6">
         <MovieDescription class="mt-3 mt-sm-0" />
+        <MovieRecommend class="mt-3" />
       </v-col>
       <v-col cols="12" sm="6">
         <MovieReviews class="mt-3 mt-sm-0" />
-        <MovieRecommend class="mt-3" />
       </v-col>
     </v-row>
   </div>
