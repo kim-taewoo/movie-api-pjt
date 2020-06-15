@@ -53,6 +53,7 @@ class MovieSerializer(serializers.ModelSerializer):
             'title',
             'sub_title',
             'poster',
+            'horizontal_poster',
             'rating',
             'pub_date',
             'runtime',
