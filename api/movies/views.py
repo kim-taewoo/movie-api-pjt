@@ -116,7 +116,14 @@ class MovieAPI(APIView, PaginationHandlerMixin):
                         # poster = naver_response['image']
                         link_url = naver_response['link'].strip()
                         poster_url = link_url.split('=')
-                        poster = 'https://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode={}'.format(poster_url[1])
+                        poster_tmp = 'https://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode={}'.format(poster_url[1])
+                        poster_response = requests.get(poster_tmp)
+                        html = poster_response.text
+                        soup = BeautifulSoup(html, 'lxml')
+                        horizontal_poster = None
+                        tmp = soup.select('#targetImage')
+                        poster = tmp[0].get('src')
+                        #targetImage
                         overview_response = requests.get(link_url)
                         html = overview_response.text
                         soup = BeautifulSoup(html, 'lxml')
