@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
+from api.pagination import BasicPagination, PaginationHandlerMixin
 from django.conf import settings
 from .models import Movie, Actor, Director, Genre, Country, Review
 from .serializers import MovieSerializer, ReviewSerializer
@@ -28,7 +29,10 @@ def get_review(review_id):
 
 # Create your views here.
 
-class MovieAPI(APIView):
+class MovieAPI(APIView, PaginationHandlerMixin):
+
+    pagination_class = BasicPagination
+    serializer_class = MovieSerializer
     
     def get_kobis_url(self, key, movieCd):
         KOBIS_DETAIL_URL = f'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key={key}&movieCd={movieCd}'
@@ -41,10 +45,16 @@ class MovieAPI(APIView):
     def get(self, request):
         order_by = request.GET.get('order_by', None)
         if order_by:
-            movies = Movie.objects.order_by(order_by)[:10]
+            movies = Movie.objects.order_by(order_by)
         else:
-            movies = Movie.objects.all()[:10]
-        serializer = MovieSerializer(movies, many=True)
+            movies = Movie.objects.all()
+            
+        page = self.paginate_queryset(movies)
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page, many=True).data)
+        else:
+            serializer = self.serializer_class(movies, many=True)
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
