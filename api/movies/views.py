@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny
 from api.pagination import BasicPagination, PaginationHandlerMixin
 from django.conf import settings
 from .models import Movie, Actor, Director, Genre, Country, Review
-from .serializers import MovieSerializer, ReviewSerializer
+from .serializers import MovieSerializer, ReviewSerializer, ReviewCreateSerializer
 
 
 def get_movie(movie_id):
@@ -212,20 +212,17 @@ class MovieRecommendation(APIView):
 
 
 class ReviewAPI(APIView, PaginationHandlerMixin):
-    pagination_class = BasicPagination
-    serializer_class = ReviewSerializer
     
     def get(self, request, movie_id):
         user = request.user
         movie = get_movie(movie_id)
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        reviews = movie.reviews
-        page = self.paginate_queryset(reviews)
-        if page is not None:
-            serializer = self.get_paginated_response(self.serializer_class(page, many=True, context={"request":request}).data)
-        else:
-            serializer = self.serializer_class(reviews, many=True, context={"request":request})
+        reviews = movie.reviews.all()
+        print(reviews)
+        for review in reviews:
+            print(review.creator)
+        serializer = ReviewSerializer(reviews, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -234,11 +231,12 @@ class ReviewAPI(APIView, PaginationHandlerMixin):
         movie = get_movie(movie_id)
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(data=request.data, context={"request":request})
+        serializer = ReviewCreateSerializer(data=request.data)
         if serializer.is_valid():
             review = serializer.save(creator=user, movie=movie)
             if review:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                new_serializer = ReviewSerializer(review)
+                return Response(new_serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -249,10 +247,11 @@ class ReviewDetailAPI(APIView):
         review = get_review(review_id)
         if not review:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(reviews, data=request.data, context={"request":request})
+        serializer = ReviewCreateSerializer(review, data=request.data, context={"request":request})
         if serializer.is_valid():
             review = serializer.save()
             if review:
+                new_serializer = ReviewSerializer(review)
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
         

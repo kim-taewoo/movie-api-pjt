@@ -1,6 +1,16 @@
 from rest_framework import serializers
 from .models import Movie, Country, Genre, Actor, Director, Review
-from users.serializers import UserSerializer
+from users.models import User
+# from users.serializers import UserSerializer
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username'
+        )
 
 class NationSerializer(serializers.ModelSerializer):
 
@@ -65,9 +75,17 @@ class MiniMovieSerializer(serializers.ModelSerializer):
             'poster',
         )
 
+class ReviewCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = (
+            'id',
+            'rating',
+            'content',
+        )
 
 class ReviewSerializer(serializers.ModelSerializer):
-    creator = UserSerializer(read_only=True)
+    creator = UserSerializer()
     movie = MiniMovieSerializer(read_only=True)
     is_liked = serializers.SerializerMethodField()
     is_unliked = serializers.SerializerMethodField()
@@ -91,13 +109,13 @@ class ReviewSerializer(serializers.ModelSerializer):
         if 'request' in self.context:
             request = self.context['request']
             if obj in request.user.liked_reviews.all():
-                return True;
+                return True
         return False
 
     def get_is_unliked(self, obj):
         if 'request' in self.context:
             request = self.context['request']
             if obj in request.user.unliked_reviews.all():
-                return True;
+                return True
         return False
     
