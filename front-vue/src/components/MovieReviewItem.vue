@@ -13,20 +13,19 @@
       {{ rating }}
     </div>
     <v-card-text class="py-1">
-      If you enjoy using Vuetify, please take a few seconds to rate your
-      experience with the framework. It really helps!
+      {{review.content}}
     </v-card-text>
     <v-card-actions class="py-0">
       <v-list-item class="py-0">
         <v-list-item-content>
-          <v-list-item-title>Evan You</v-list-item-title>
+          <v-list-item-title>{{review.creator.username}}</v-list-item-title>
         </v-list-item-content>
 
         <v-row align="center" justify="end">
           <v-btn icon color="pink" class="mr-1">
             <v-icon>mdi-heart</v-icon>
           </v-btn>
-          <span class="subheading mr-2">256</span>
+          <span class="subheading mr-2">{{review.likes_count}}</span>
         </v-row>
       </v-list-item>
     </v-card-actions>
@@ -35,9 +34,14 @@
 
 <script>
 export default {
+  props: ['review'],
   data: () => ({
-    rating: 4.5,
   }),
+  computed: {
+    rating() {
+      return this.review.rating
+    }
+  }
 };
 </script>
 

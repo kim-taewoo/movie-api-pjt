@@ -9,17 +9,8 @@
     </v-row>
     <hr />
     <v-row>
-      <v-col cols="12" sm="6" class="py-1">
-        <MovieReviewItem />
-      </v-col>
-      <v-col cols="12" sm="6" class="py-1">
-        <MovieReviewItem />
-      </v-col>
-      <v-col cols="12" sm="6" class="py-1">
-        <MovieReviewItem />
-      </v-col>
-      <v-col cols="12" sm="6" class="py-1">
-        <MovieReviewItem />
+      <v-col v-for="review in reviews" :key="review.id" cols="12" sm="6" class="py-1">
+        <MovieReviewItem :review="review" />
       </v-col>
     </v-row>
     <v-row>
@@ -56,15 +47,27 @@
 
 <script>
 import MovieReviewItem from '@/components/MovieReviewItem';
+import {mapActions} from 'vuex'
 export default {
+  props: ['movieId'],
   components: {
     MovieReviewItem,
   },
   data() {
     return {
       rating: 5,
+
+      reviews: []
     };
   },
+  methods: {
+    ...mapActions(['fetchReviews'])
+  },
+  created() {
+    fetchReviews(this.movieId).then((data) => {
+      this.reviews = data.results
+    })
+  }
 };
 </script>
 

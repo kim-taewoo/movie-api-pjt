@@ -99,21 +99,11 @@ export default {
         icon: 'mdi-movie-outline',
         link: '/movies',
       },
-      // {
-      //   name: '랭킹',
-      //   icon: 'mdi-trophy-outline',
-      //   link: '/rankings'
-      // }
     ],
   }),
   methods: {
     ...mapActions(['logout', 'initiateMoviesDB']),
 
-    // test() {
-    //   this.initiateMoviesDB()
-    //     .then((res) => console.log(res))
-    //     .catch(err => console.log(err))
-    // },
   },
   computed: {
     ...mapGetters(['isLoggedIn'])

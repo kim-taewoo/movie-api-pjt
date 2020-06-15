@@ -5,5 +5,6 @@ export default {
     login: '/rest-auth/login/',
     logout: '/rest-auth/logout/',
     movieList: '/api/v1/movies/',
+    reviewList: '/api/v1/movies/'
   },
 };

@@ -19,7 +19,7 @@ export default new Vuex.Store({
     config: (state) => ({
       headers: {
         Authorization: `JWT ${state.authToken}`,
-        'content-Type': 'Application/json'
+        'content-Type': 'Application/json',
       },
     }),
   },
@@ -82,6 +82,15 @@ export default new Vuex.Store({
       axios
         .get(SERVER.URL + SERVER.ROUTES.movieList, getters.config)
         .then((res) => commit('SET_MOVIES', res.data))
+        .catch((err) => console.error(err));
+    },
+    fetchReviews({ getters, commit }, movieId) {
+      axios
+        .get(SERVER.URL + SERVER.ROUTES.reviewList + movieId + '/reviews' , getters.config)
+        .then((res) => {
+          commit('SET_MOVIES', res.data)
+          return res.data
+        })
         .catch((err) => console.error(err));
     },
   },
