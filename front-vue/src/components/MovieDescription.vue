@@ -31,25 +31,25 @@
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          장르: {{movie.genres[0].name}}
+          <!-- 장르: {{movie.genres[0].name}} -->
         </v-chip>
         <v-chip label class="ma-1" color="indigo" text-color="white">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          감독: {{movie.directors[0].name}}
+          <!-- 감독: {{movie.directors[0].name}} -->
         </v-chip>
         <v-chip label class="ma-1" color="indigo" text-color="white">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          {{movie.nations[0].name}}
+          <!-- {{movie.nations[0].name}} -->
         </v-chip>
         <v-chip label class="ma-1" color="indigo" text-color="white">
           <v-avatar left>
             <v-icon>mdi-account-circle</v-icon>
           </v-avatar>
-          배우: {{movie.actors[0].name}}
+          <!-- 배우: {{movie.actors[0].name}} -->
         </v-chip>
       </v-col>
     </v-row>

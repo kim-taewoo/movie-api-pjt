@@ -1,15 +1,15 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="currentMovie.id">
       <v-col cols="12">
-        <HeroImage :movie="movie" />
+        <HeroImage :movie="currentMovie" />
       </v-col>
       <v-col cols="12" sm="6">
-        <MovieDescription :movie="movie" class="mt-3 mt-sm-0" />
-        <MovieRecommend class="mt-3" />
+        <MovieDescription :movie="currentMovie" class="mt-3 mt-sm-0" />
       </v-col>
       <v-col cols="12" sm="6">
-        <MovieReviews :movieId="movie.id" class="mt-3 mt-sm-0" />
+        <MovieReviews :movieId="currentMovie.id" class="mt-3 mt-sm-0" />
+        <MovieRecommend :movieId="currentMovie.id" class="mt-3" />
       </v-col>
     </v-row>
   </div>
@@ -20,14 +20,34 @@ import HeroImage from '@/components/HeroImage'
 import MovieDescription from '@/components/MovieDescription'
 import MovieReviews from '@/components/MovieReviews'
 import MovieRecommend from '@/components/MovieRecommend'
+import {mapActions} from 'vuex'
 export default {
   name: 'MovieDetail',
   props: ['movie'],
+  data() {
+    return {
+      currentMovie: {}
+    }
+  },
   components: {
     HeroImage,
     MovieDescription,
     MovieReviews,
     MovieRecommend
+  },
+  methods: {
+    ...mapActions(['fetchMovie'])
+  },
+  created() {
+    console.log(this.$route.params.id)
+    console.log(typeof(this.movie))
+    if (typeof(this.movie) === 'undefined') {
+      this.fetchMovie(this.$route.params.id).then(res => {
+        this.currentMovie = res
+      });
+    } else {
+      this.currentMovie = this.movie
+    }
   }
 };
 </script>

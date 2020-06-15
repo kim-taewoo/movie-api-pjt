@@ -35,6 +35,7 @@ const routes = [
     path: '/movies/:id',
     name: 'MovieDetail',
     component: MovieDetail,
+    props: true
   },
   {
     path: '/trailer',
@@ -52,7 +53,6 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = store.getters.isLoggedIn
-  console.log(isAuthenticated);
   if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' });
   else next();
 });

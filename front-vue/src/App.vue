@@ -30,7 +30,7 @@
 
       <template v-slot:append>
         <div class="pa-2 mb-5">
-          <v-btn @click="initiateMoviesDB">InitiateDB(test)</v-btn>
+          <!-- <v-btn @click="initiateMoviesDB">InitiateDB(test)</v-btn> -->
           <v-btn v-if="!isLoggedIn" block to="/login">
             LOGIN<v-icon right dark>mdi-key</v-icon>
           </v-btn>
@@ -43,7 +43,7 @@
 
     <v-app-bar app clipped-left dense flat>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-spacer></v-spacer>
+      <!-- <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-spacer></v-spacer>
       <v-text-field
@@ -53,7 +53,7 @@
         label="영화검색"
         prepend-icon="mdi-magnify"
         color="red"
-      ></v-text-field>
+      ></v-text-field> -->
     </v-app-bar>
 
     

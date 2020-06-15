@@ -1,6 +1,6 @@
 <template>
   <v-parallax
-    height="350"
+    height="300"
     dark
     :src="movie.poster"
   >

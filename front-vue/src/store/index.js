@@ -13,6 +13,8 @@ export default new Vuex.Store({
   state: {
     authToken: cookies.get('auth-token'),
     movies: [],
+    recommends: [],
+    reviews: []
   },
   getters: {
     isLoggedIn: (state) => !!state.authToken,
@@ -31,14 +33,19 @@ export default new Vuex.Store({
     SET_MOVIES(state, movies) {
       state.movies = movies;
     },
+    SET_REVIEWS(state, reviews) {
+      state.reviews = reviews;
+    },
+    SET_RECOMMENDS(state, recommends) {
+      state.recommends = recommends;
+    },
   },
   actions: {
-    postAuthData({ getters, commit }, info) {
+    postAuthData({ commit }, info) {
       axios
         .post(SERVER.URL + info.location, info.data)
         .then((res) => {
           commit('SET_TOKEN', res.data.token);
-          console.log(getters.isLoggedIn);
           router.push({ name: 'Home' });
         })
         .catch((err) => console.error(err.response.data));
@@ -58,14 +65,12 @@ export default new Vuex.Store({
       dispatch('postAuthData', info);
     },
     logout({ getters, commit }) {
-      axios
-        .get(SERVER.URL + SERVER.ROUTES.logout, getters.config)
-        .then(() => {
-          // 장고에선 삭제, cookie, state 엔 아직
-          commit('SET_TOKEN', null);
-          cookies.remove('auth-token');
-          router.push({ name: 'Home' });
-        });
+      axios.get(SERVER.URL + SERVER.ROUTES.logout, getters.config).then(() => {
+        // 장고에선 삭제, cookie, state 엔 아직
+        commit('SET_TOKEN', null);
+        cookies.remove('auth-token');
+        router.push({ name: 'Home' });
+      });
       // .catch((err) => console.error(err.response.data));
     },
 
@@ -76,20 +81,51 @@ export default new Vuex.Store({
         .catch((err) => console.error(err));
     },
 
-    fetchMovies: async function({getters}) {
-      const res = await axios
-        .get(SERVER.URL + SERVER.ROUTES.movieList, getters.config)
-        .then((res) => res.data)
-        .catch((err) => console.error(err));
-      console.log(res);
-      return res;
+    fetchMovies: async function({ commit, getters }, params) {
+      try {
+        const res = await axios.get(SERVER.URL + SERVER.ROUTES.movieList, {
+          ...getters.config,
+          ...params,
+        });
+        const data = await res.data;
+        commit('SET_MOVIES', data.results);
+      } catch (err) {
+        console.error(err);
+      }
     },
+
+    fetchMovie: async function({getters}, movieId) {
+      try {
+        const res = await axios.get(SERVER.URL + SERVER.ROUTES.movieDetail + movieId, getters.config)
+        const data = await res.data[0];
+        return data;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
     fetchReviews({ getters, commit }, movieId) {
       axios
-        .get(SERVER.URL + SERVER.ROUTES.reviewList + movieId + '/reviews' , getters.config)
+        .get(
+          SERVER.URL + SERVER.ROUTES.reviewList + movieId + '/reviews/',
+          getters.config
+        )
         .then((res) => {
-          commit('SET_MOVIES', res.data)
-          return res.data
+          commit('SET_REVIEWS', res.data);
+          return res.data;
+        })
+        .catch((err) => console.error(err));
+    },
+
+    fetchRecommends({ getters, commit }, movieId) {
+      axios
+        .get(
+          SERVER.URL + SERVER.ROUTES.recommendList + movieId + '/recommend/',
+          getters.config
+        )
+        .then((res) => {
+          commit('SET_RECOMMENDS', res.data);
+          return res.data;
         })
         .catch((err) => console.error(err));
     },

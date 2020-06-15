@@ -1,9 +1,9 @@
 <template>
   <v-card color="white">
     <v-tabs light background-color="white" color="grey darken-4" centered>
-      <v-tab @click="fetchMovie1">현재상영작</v-tab>
-      <v-tab>평점순</v-tab>
-      <v-tab>관객순</v-tab>
+      <v-tab @click="onTabClick('-pub_date')">현재상영작</v-tab>
+      <v-tab @click="onTabClick('-rating')">평점순</v-tab>
+      <v-tab @click="onTabClick('-audi_cnt')">관객순</v-tab>
 
       <v-tab-item v-for="n in 3" :key="n">
         <v-card light class="pb-4">
@@ -22,10 +22,10 @@
                     class="d-flex galleryItem"
                     :elevation="hover ? 12 : 2"
                     :class="{ 'on-hover': hover }"
-                    :to="{name: 'MovieDetail', params: {id:n}}"
+                    :to="{ name: 'MovieDetail', params: { id: movie.id, movie: movie } }"
                   >
                     <v-img
-                      :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
+                      :src="movie.poster"
                       :lazy-src="
                         `https://picsum.photos/10/6?image=${n * 5 + 10}`
                       "
@@ -52,7 +52,7 @@
           </v-container>
         </v-card>
         <div style="position:absolute;bottom:0;right:0;color:black">
-          <v-btn :to="{name: 'Movies'}" color="blue" small text>더보기</v-btn>
+          <v-btn :to="{ name: 'Movies' }" color="blue" small text>더보기</v-btn>
         </div>
       </v-tab-item>
     </v-tabs>
@@ -60,24 +60,31 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'ImageGallery',
+  computed: {
+    ...mapState(['movies']),
+  },
   methods: {
-    ...mapActions({
-      fetchMovies: 'fetchMovies',
-    }),
-
-    // test() {
-    //   this.initiateMoviesDB()
-    //     .then((res) => console.log(res))
-    //     .catch(err => console.log(err))
-    // },
-    async fetchMovie1() {
-      const res = await this.fetchMovies();
-      console.log(res);
-    }
+    ...mapActions(['fetchMovies']),
+    onTabClick(type) {
+      this.fetchMovies({
+        params: {
+          page: 1,
+          order_by: type,
+        },
+      });
+    },
+  },
+  created() {
+    this.fetchMovies({
+      params: {
+        page: 1,
+        order_by: '-pub_date',
+      },
+    });
   },
 };
 </script>

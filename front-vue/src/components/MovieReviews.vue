@@ -63,11 +63,11 @@ export default {
   methods: {
     ...mapActions(['fetchReviews'])
   },
-  created() {
-    fetchReviews(this.movieId).then((data) => {
-      this.reviews = data.results
-    })
-  }
+  // created() {
+  //   this.fetchReviews(this.movieId).then((data) => {
+  //     this.reviews = data.results
+  //   })
+  // }
 };
 </script>
 
