@@ -12,7 +12,7 @@
             :to="{name: 'MovieTrailer', params: {title: movie.title}}"
           >
             <v-img
-              :src="movie.poster"
+              :src="movie.horizontal_poster"
               class="white--text align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
               height="200px"

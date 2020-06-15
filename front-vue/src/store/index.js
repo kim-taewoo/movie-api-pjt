@@ -92,6 +92,7 @@ export default new Vuex.Store({
         });
         const data = await res.data;
         commit('SET_MOVIES', data.results);
+        console.log(data)
       } catch (err) {
         console.error(err);
       }

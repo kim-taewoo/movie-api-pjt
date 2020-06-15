@@ -25,7 +25,7 @@
                     :to="{ name: 'MovieDetail', params: { id: movie.id, movie: movie } }"
                   >
                     <v-img
-                      :src="movie.poster"
+                      :src="movie.horizontal_poster"
                       :lazy-src="
                         `https://picsum.photos/10/6?image=${n * 5 + 10}`
                       "
