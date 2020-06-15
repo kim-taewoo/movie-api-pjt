@@ -3,76 +3,85 @@
      
 ### `/api/v1/movies/` ( 영화 가져오기 )
 
+> 페이지네이션 : 한페이지에 영화 10개씩  /  query로 page 안주면 자동으로 1페이지
+
 #### 높은 평점순
   | 메서드 | 상태 코드 | 인증 필요 여부 | 필수 요청 데이터 | query string |
   | --- | --- | --- | --- | --- |
-  | GET | 200(성공), 401(인증실패) | True | | `?order_by=-rating` |
+  | GET | 200(성공), 401(인증실패) | True | | `?page={페이지번호}&order_by=-rating` |
 
 #### 낮은 평점순
   | 메서드 | 상태 코드 | 인증 필요 여부 | 필수 요청 데이터 | query string |
   | --- | --- | --- | --- | --- |
-  | GET | 200(성공), 401(인증실패) | True | | `?order_by=rating` |
+  | GET | 200(성공), 401(인증실패) | True | | `?page={페이지번호}&order_by=rating` |
 
 #### 최근 영화순
   | 메서드 | 상태 코드 | 인증 필요 여부 | 필수 요청 데이터 | query string |
   | --- | --- | --- | --- | --- |
-  | GET | 200(성공), 401(인증실패) | True | | `?order_by=-pub_date` |
+  | GET | 200(성공), 401(인증실패) | True | | `?page={페이지번호}&order_by=-pub_date` |
 
 #### 관객수순
   | 메서드 | 상태 코드 | 인증 필요 여부 | 필수 요청 데이터 | query string |
   | --- | --- | --- | --- | --- |
-  | GET | 200(성공), 401(인증실패)| True | | `?order_by=-audi_cnt` |
+  | GET | 200(성공), 401(인증실패)| True | | `?page={페이지번호}&order_by=-audi_cnt` |
 
   - 리턴 데이터 타입
     ```js
-    [
-      {
-        id: Number,
-        title: String,  // 한글 타이틀
-        sub_title: String,  // 영어 타이틀
-        poster: String,
-        rating: Float,
-        pub_date: 'YYYY-MM-DD',
-        runtime: Number,
-        overview: String,
-        audits: String, // 12세 관람가, 15세 관람가 등
-        audi_cnt: Number, // 관객수
-        genres: [
-          {
-            id: Number,
-            name: String,
-          },
-          // ...
-        ],
-        actors: [
-          {
-            id: Number,
-            name: String,
-          },
-          // ...
-        ],
-        directors: [
-          {
-            id: Number,
-            name: String,
-          },
-          // ...
-        ],
-        nations: [
-          {
-            id: Number,
-            name: String,
-          },
-          // ...
-        ],
-      },
-      // ...
-    ]
+    {
+      count: Number,    // 가져온 모든 영화 갯수
+      next: Url,        // 다음 페이지 url
+      previous: Url,    // 이전 페이지 url
+      results: [
+        {
+          id: Number,
+          title: String,  // 한글 타이틀
+          sub_title: String,  // 영어 타이틀
+          poster: String,
+          rating: Float,
+          pub_date: 'YYYY-MM-DD',
+          runtime: Number,
+          overview: String,
+          audits: String, // 12세 관람가, 15세 관람가 등
+          audi_cnt: Number, // 관객수
+          genres: [
+            {
+              id: Number,
+              name: String,
+            },
+            // ...
+          ],
+          actors: [
+            {
+              id: Number,
+              name: String,
+            },
+            // ...
+          ],
+          directors: [
+            {
+              id: Number,
+              name: String,
+            },
+            // ...
+          ],
+          nations: [
+            {
+              id: Number,
+              name: String,
+            },
+            // ...
+          ],
+        },
+        // ...
+      ]
+    }
     ```
 
 <br />
 
 ### `/api/v1/movies/<int:movie_id>/` 
+
+> 페이지네이션 : 한페이지에 리뷰 10개씩  /  query로 page 안주면 자동으로 1페이지
 
 #### 영화 상세 가져오기
   | 메서드 | 상태 코드 | 인증 필요 여부 | 필수 요청 데이터 | query string |
@@ -134,32 +143,37 @@
 #### 영화에 대한 리뷰 모두 가져오기
   | 메서드 | 상태 코드 | 인증 필요 여부 | 필수 요청 데이터 | query string |
   | --- | --- | --- | --- | --- |
-  | GET | 200(성공), 401(인증실패), 404(영화 찾지 못함) | True | | |
+  | GET | 200(성공), 401(인증실패), 404(영화 찾지 못함) | True | | `?page={페이지번호}` |
 
   - 리턴 데이터 타입
     ```js
-    [
-      {
-        id: Number,
-        rating: Float,
-        content: String,
-        creator: {
+    {
+      count: Number,    // 가져온 모든 리뷰 갯수
+      next: Url,        // 다음 페이지 url
+      previous: Url,    // 이전 페이지 url
+      results: [
+        {
           id: Number,
-          username: String,
+          rating: Float,
+          content: String,
+          creator: {
+            id: Number,
+            username: String,
+          },
+          movie: {
+            id: Number,
+            title: String,
+            poster: String,
+          },
+          formatted_time: 'YYYY-MM-DD',
+          likes_count: Number,
+          unlikes_count: Number,
+          is_liked: Boolean,
+          is_unliked: Boolean,
         },
-        movie: {
-          id: Number,
-          title: String,
-          poster: String,
-        },
-        formatted_time: 'YYYY-MM-DD',
-        likes_count: Number,
-        unlikes_count: Number,
-        is_liked: Boolean,
-        is_unliked: Boolean,
-      },
-      // ...
-    ]
+        // ...
+      ]
+    }
     ```
 
 #### 영화에 대한 리뷰 게시
