@@ -209,11 +209,10 @@ class MovieRecommendation(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
         actors = movie.actors.all()[:10]
         genres = movie.genres.all()
-        movies = Movie.objects.filter(actors__in=actors).exclude(title=movie.title)[:4]
+        # movies = Movie.objects.filter(actors__in=actors).exclude(title=movie.title)[:4]
+        movies = Movie.objects.filter(Q(actors__in=actors)|Q(genres__in=genres)).exclude(title=movie.title)[:4]
         if len(movies) < 4:
-            new_movies = Movie.objects.filter(genres__in=genres).exclude(title=movie.title)[:4]
-        movies = movies + new_movies
-        movies = movies[:4]
+            movies = Movie.objects.all()[:4]
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
