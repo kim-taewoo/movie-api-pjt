@@ -59,7 +59,7 @@ export default new Vuex.Store({
     },
     logout({ getters, commit }) {
       axios
-        .post(SERVER.URL + SERVER.ROUTES.logout, null, getters.config)
+        .get(SERVER.URL + SERVER.ROUTES.logout, getters.config)
         .then(() => {
           // 장고에선 삭제, cookie, state 엔 아직
           commit('SET_TOKEN', null);
@@ -76,13 +76,13 @@ export default new Vuex.Store({
         .catch((err) => console.error(err));
     },
 
-    fetchMovies({ getters, commit }) {
-      // console.log(SERVER.URL + SERVER.ROUTES.movieList, getters.config);
-      console.log(getters.config);
-      axios
+    fetchMovies: async function({getters}) {
+      const res = await axios
         .get(SERVER.URL + SERVER.ROUTES.movieList, getters.config)
-        .then((res) => commit('SET_MOVIES', res.data))
+        .then((res) => res.data)
         .catch((err) => console.error(err));
+      console.log(res);
+      return res;
     },
     fetchReviews({ getters, commit }, movieId) {
       axios

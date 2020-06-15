@@ -1,7 +1,7 @@
 <template>
   <v-card color="white">
     <v-tabs light background-color="white" color="grey darken-4" centered>
-      <v-tab>현재상영작</v-tab>
+      <v-tab @click="fetchMovie1">현재상영작</v-tab>
       <v-tab>평점순</v-tab>
       <v-tab>관객순</v-tab>
 
@@ -60,9 +60,25 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'ImageGallery',
-  props: ['movies']
+  methods: {
+    ...mapActions({
+      fetchMovies: 'fetchMovies',
+    }),
+
+    // test() {
+    //   this.initiateMoviesDB()
+    //     .then((res) => console.log(res))
+    //     .catch(err => console.log(err))
+    // },
+    async fetchMovie1() {
+      const res = await this.fetchMovies();
+      console.log(res);
+    }
+  },
 };
 </script>
 
