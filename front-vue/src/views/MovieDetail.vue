@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row v-if="currentMovie.id">
+    <v-row v-if="currentMovie">
       <v-col cols="12">
         <HeroImage :movie="currentMovie" />
       </v-col>
@@ -16,39 +16,47 @@
 </template>
 
 <script>
-import HeroImage from '@/components/HeroImage'
-import MovieDescription from '@/components/MovieDescription'
-import MovieReviews from '@/components/MovieReviews'
-import MovieRecommend from '@/components/MovieRecommend'
-import {mapActions} from 'vuex'
+import HeroImage from '@/components/HeroImage';
+import MovieDescription from '@/components/MovieDescription';
+import MovieReviews from '@/components/MovieReviews';
+import MovieRecommend from '@/components/MovieRecommend';
+import { mapActions } from 'vuex';
 export default {
   name: 'MovieDetail',
   props: ['movie'],
   data() {
     return {
-      currentMovie: {}
-    }
+      currentMovie: null,
+    };
   },
   components: {
     HeroImage,
     MovieDescription,
     MovieReviews,
-    MovieRecommend
+    MovieRecommend,
   },
   methods: {
-    ...mapActions(['fetchMovie'])
+    ...mapActions(['fetchMovie']),
+  },
+  watch: {
+    $route(to, from) {
+      if (to !== from) {
+        this.fetchMovie(this.$route.params.id).then((res) => {
+          this.currentMovie = res;
+        });
+      }
+    },
   },
   created() {
-    console.log(this.$route.params.id)
-    console.log(typeof(this.movie))
-    if (typeof(this.movie) === 'undefined') {
-      this.fetchMovie(this.$route.params.id).then(res => {
-        this.currentMovie = res
+    if (typeof this.movie === 'undefined') {
+      this.fetchMovie(this.$route.params.id).then((res) => {
+        console.log(res);
+        this.currentMovie = res;
       });
     } else {
-      this.currentMovie = this.movie
+      this.currentMovie = this.movie;
     }
-  }
+  },
 };
 </script>
 

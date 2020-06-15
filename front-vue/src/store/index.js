@@ -14,7 +14,7 @@ export default new Vuex.Store({
     authToken: cookies.get('auth-token'),
     movies: [],
     recommends: [],
-    reviews: []
+    reviews: [],
   },
   getters: {
     isLoggedIn: (state) => !!state.authToken,
@@ -38,6 +38,9 @@ export default new Vuex.Store({
     },
     SET_RECOMMENDS(state, recommends) {
       state.recommends = recommends;
+    },
+    ADD_REVIEW(state, review) {
+      state.reviews = [...state.reviews, review];
     },
   },
   actions: {
@@ -76,14 +79,14 @@ export default new Vuex.Store({
 
     initiateMoviesDB({ getters, commit }) {
       axios
-        .post(SERVER.URL + SERVER.ROUTES.movieList, null, getters.config)
+        .post(SERVER.URL + SERVER.ROUTES.movies, null, getters.config)
         .then((res) => commit('SET_MOVIES', res.data))
         .catch((err) => console.error(err));
     },
 
     fetchMovies: async function({ commit, getters }, params) {
       try {
-        const res = await axios.get(SERVER.URL + SERVER.ROUTES.movieList, {
+        const res = await axios.get(SERVER.URL + SERVER.ROUTES.movies, {
           ...getters.config,
           ...params,
         });
@@ -94,11 +97,13 @@ export default new Vuex.Store({
       }
     },
 
-    fetchMovie: async function({getters}, movieId) {
+    fetchMovie: async function({ getters }, movieId) {
       try {
-        const res = await axios.get(SERVER.URL + SERVER.ROUTES.movieDetail + movieId, getters.config)
-        const data = await res.data[0];
-        return data;
+        const res = await axios.get(
+          SERVER.URL + SERVER.ROUTES.movies + movieId,
+          getters.config
+        );
+        return res.data;
       } catch (err) {
         console.error(err);
       }
@@ -106,13 +111,29 @@ export default new Vuex.Store({
 
     fetchReviews({ getters, commit }, movieId) {
       axios
-        .get(
-          SERVER.URL + SERVER.ROUTES.reviewList + movieId + '/reviews/',
+        .get(SERVER.URL + SERVER.ROUTES.movies + movieId + '/reviews/', {
+          ...getters.config,
+          params: { page: 1 },
+        })
+        .then((res) => {
+          console.log(res.data);
+          commit('SET_REVIEWS', res.data);
+        })
+        .catch((err) => console.error(err));
+    },
+
+    createReview({ getters, commit }, reviewData) {
+      const {movieId, ...reviewDataForm} = reviewData
+      console.log({...reviewData});
+      axios
+        .post(
+          SERVER.URL + SERVER.ROUTES.movies + movieId + '/reviews/',
+          reviewDataForm,
           getters.config
         )
         .then((res) => {
-          commit('SET_REVIEWS', res.data);
-          return res.data;
+          console.log(res.data);
+          commit('ADD_REVIEW', res.data);
         })
         .catch((err) => console.error(err));
     },
@@ -120,7 +141,7 @@ export default new Vuex.Store({
     fetchRecommends({ getters, commit }, movieId) {
       axios
         .get(
-          SERVER.URL + SERVER.ROUTES.recommendList + movieId + '/recommend/',
+          SERVER.URL + SERVER.ROUTES.movies + movieId + '/recommend/',
           getters.config
         )
         .then((res) => {

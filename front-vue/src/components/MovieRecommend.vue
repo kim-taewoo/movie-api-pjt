@@ -9,6 +9,7 @@
             :elevation="hover ? 12 : 2"
             :class="{ 'on-hover': hover }"
             light
+            :to="{ name: 'MovieDetail', params: { id: recommend.id } }"
           >
             <v-img
               :src="recommend.poster"
@@ -26,18 +27,18 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex'
+import { mapActions, mapState } from 'vuex';
 export default {
   props: ['movieId'],
   computed: {
-    ...mapState(['recommends'])
+    ...mapState(['recommends']),
   },
   methods: {
-    ...mapActions(['fetchRecommends'])
+    ...mapActions(['fetchRecommends']),
   },
   created() {
-    this.fetchRecommends(this.movieId)
-  }
+    this.fetchRecommends(this.movieId);
+  },
 };
 </script>
 

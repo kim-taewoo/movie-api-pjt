@@ -22,22 +22,23 @@
                 label="나의 감상평"
                 single-line
                 outlined
+                v-model="reviewData.content"
               ></v-text-field>
             </div>
             <div class="text-center">
               <v-rating
-                v-model="rating"
+                v-model="reviewData.rating"
                 color="yellow darken-3"
                 background-color="grey darken-1"
                 empty-icon="$ratingFull"
                 half-increments
                 hover
               ></v-rating>
-              나의 평점: {{ rating }}
+              나의 평점: {{ reviewData.rating }}
             </div>
           </v-card-text>
           <v-card-actions class="justify-center">
-            <v-btn block color="pink" dark>리뷰 남기기</v-btn>
+            <v-btn @click.stop="onReviewSubmit" block color="pink" dark>리뷰 남기기</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -47,7 +48,7 @@
 
 <script>
 import MovieReviewItem from '@/components/MovieReviewItem';
-import {mapActions} from 'vuex'
+import {mapActions, mapState} from 'vuex'
 export default {
   props: ['movieId'],
   components: {
@@ -55,19 +56,29 @@ export default {
   },
   data() {
     return {
-      rating: 5,
-
-      reviews: []
+      reviewData: {
+        rating: 5,
+        content: ''
+      }
     };
   },
   methods: {
-    ...mapActions(['fetchReviews'])
+    ...mapActions(['fetchReviews', 'createReview']),
+    onReviewSubmit() {
+      console.log({...this.reviewData})
+      this.createReview({movieId: this.movieId, ...this.reviewData})
+      this.reviewData = {
+        rating: 5.0,
+        content: ''
+      }
+    }
   },
-  // created() {
-  //   this.fetchReviews(this.movieId).then((data) => {
-  //     this.reviews = data.results
-  //   })
-  // }
+  computed: {
+    ...mapState(['reviews'])
+  },
+  created() {
+    this.fetchReviews(this.movieId)
+  }
 };
 </script>
 
