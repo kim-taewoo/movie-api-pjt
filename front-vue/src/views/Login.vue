@@ -37,9 +37,9 @@
             <v-btn color="pink lighten-1" text to="/signup">회원가입</v-btn>
             <v-spacer></v-spacer>
             <v-btn color="pink lighten-3" text>취소</v-btn>
-            <v-btn color="pink lighten-3" text @click="login(loginData)"
-              >확인</v-btn
-            >
+            <v-btn color="pink lighten-3" text @click="login(loginData)">
+              확인
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>

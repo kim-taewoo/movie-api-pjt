@@ -17,7 +17,10 @@ export default new Vuex.Store({
   getters: {
     isLoggedIn: (state) => !!state.authToken,
     config: (state) => ({
-      headers: { Authorization: `JWT ${state.authToken}` },
+      headers: {
+        Authorization: `JWT ${state.authToken}`,
+        'content-Type': 'Application/json'
+      },
     }),
   },
   mutations: {
@@ -30,12 +33,12 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    postAuthData({ commit }, info) {
-      console.log(info);
+    postAuthData({ getters, commit }, info) {
       axios
         .post(SERVER.URL + info.location, info.data)
         .then((res) => {
           commit('SET_TOKEN', res.data.token);
+          console.log(getters.isLoggedIn);
           router.push({ name: 'Home' });
         })
         .catch((err) => console.error(err.response.data));
@@ -62,20 +65,22 @@ export default new Vuex.Store({
           commit('SET_TOKEN', null);
           cookies.remove('auth-token');
           router.push({ name: 'Home' });
-        })
-        .catch((err) => console.error(err.response.data));
+        });
+      // .catch((err) => console.error(err.response.data));
     },
 
-    initiateMoviesDB({getters, commit}) {
+    initiateMoviesDB({ getters, commit }) {
       axios
         .post(SERVER.URL + SERVER.ROUTES.movieList, null, getters.config)
         .then((res) => commit('SET_MOVIES', res.data))
         .catch((err) => console.error(err));
     },
 
-    fetchMovies({commit}) {
+    fetchMovies({ getters, commit }) {
+      // console.log(SERVER.URL + SERVER.ROUTES.movieList, getters.config);
+      console.log(getters.config);
       axios
-        .get(SERVER.URL + SERVER.ROUTES.movieList)
+        .get(SERVER.URL + SERVER.ROUTES.movieList, getters.config)
         .then((res) => commit('SET_MOVIES', res.data))
         .catch((err) => console.error(err));
     },

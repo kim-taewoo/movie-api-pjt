@@ -30,8 +30,12 @@
 
       <template v-slot:append>
         <div class="pa-2 mb-5">
-          <v-btn block to="/login">
+          <v-btn @click="initiateMoviesDB">InitiateDB(test)</v-btn>
+          <v-btn v-if="!isLoggedIn" block to="/login">
             LOGIN<v-icon right dark>mdi-key</v-icon>
+          </v-btn>
+          <v-btn @click="logout" v-else block to="/login">
+            LOGOUT<v-icon right dark>mdi-key</v-icon>
           </v-btn>
         </div>
       </template>
@@ -75,7 +79,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
   props: {
     source: String,
@@ -103,13 +107,16 @@ export default {
     ],
   }),
   methods: {
-    ...mapActions(['fetchMovies', 'initiateMoviesDB']),
+    ...mapActions(['logout', 'initiateMoviesDB']),
 
     // test() {
     //   this.initiateMoviesDB()
     //     .then((res) => console.log(res))
     //     .catch(err => console.log(err))
     // },
+  },
+  computed: {
+    ...mapGetters(['isLoggedIn'])
   },
   created() {
     this.$vuetify.theme.dark = true;

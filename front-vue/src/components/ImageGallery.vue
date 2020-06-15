@@ -10,8 +10,8 @@
           <v-container fluid>
             <v-row>
               <v-col
-                v-for="n in 9"
-                :key="n"
+                v-for="movie in movies"
+                :key="movie.id"
                 class="d-flex child-flex pa-1"
                 cols="4"
               >
@@ -52,7 +52,7 @@
           </v-container>
         </v-card>
         <div style="position:absolute;bottom:0;right:0;color:black">
-          <v-btn color="blue" small text>더보기</v-btn>
+          <v-btn :to="{name: 'Movies'}" color="blue" small text>더보기</v-btn>
         </div>
       </v-tab-item>
     </v-tabs>
@@ -62,6 +62,7 @@
 <script>
 export default {
   name: 'ImageGallery',
+  props: ['movies']
 };
 </script>
 
