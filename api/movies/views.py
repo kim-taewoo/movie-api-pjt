@@ -53,7 +53,7 @@ class MovieAPI(APIView, PaginationHandlerMixin):
             serializer = self.get_paginated_response(self.serializer_class(page, many=True).data)
         else:
             serializer = self.serializer_class(movies, many=True)
-        
+        pp(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
