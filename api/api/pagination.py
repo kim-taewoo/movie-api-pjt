@@ -22,4 +22,4 @@ class PaginationHandlerMixin(object):
 class BasicPagination(PageNumberPagination):
     # default_limit = 5
     # max_limit = 5
-   page_size = 10
+   page_size = 9

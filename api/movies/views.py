@@ -69,7 +69,7 @@ class MovieAPI(APIView, PaginationHandlerMixin):
         }
 
         year = 1
-        month = 2
+        month = 9
 
         for y in range(0, year):
             for m in range(1, month):
@@ -82,7 +82,7 @@ class MovieAPI(APIView, PaginationHandlerMixin):
                 
                 results = tmp['boxOfficeResult']['dailyBoxOfficeList']
 
-                for result in results[:2]:
+                for result in results:
                     movie_cd = result['movieCd']
                     audi_cnt = int(result['audiCnt'])
                     try:
