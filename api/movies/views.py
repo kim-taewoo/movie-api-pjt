@@ -30,7 +30,6 @@ def get_review(review_id):
 # Create your views here.
 
 class MovieAPI(APIView, PaginationHandlerMixin):
-
     pagination_class = BasicPagination
     serializer_class = MovieSerializer
     
@@ -180,7 +179,9 @@ class MovieDetailAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ReviewAPI(APIView):
+class ReviewAPI(APIView, PaginationHandlerMixin):
+    pagination_class = BasicPagination
+    serializer_class = ReviewSerializer
     
     def get(self, request, movie_id):
         user = request.user
@@ -188,7 +189,12 @@ class ReviewAPI(APIView):
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
         reviews = movie.reviews
-        serializer = ReviewSerializer(reviews, many=True, context={"request":request})
+        page = self.paginate_queryset(reviews)
+        if page is not None:
+            serializer = self.get_paginated_response(self.serializer_class(page, many=True, context={"request":request}).data)
+        else:
+            serializer = self.serializer_class(reviews, many=True, context={"request":request})
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
         
     def post(self, request, movie_id):
