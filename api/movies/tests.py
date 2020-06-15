@@ -34,6 +34,7 @@ class MovieTest(APITestCase):
         
         self.movie_api_url = reverse('movies:movie_api')
         self.movie_detail_api_url = reverse('movies:movie_detail_api', kwargs={'movie_id': self.test_movie.id})
+        self.movie_recommend_url = reverse('movies:movie_recommend', kwargs={'movie_id': self.test_movie.id})
         self.review_api_url = reverse('movies:review_api', kwargs={'movie_id': self.test_movie.id})
         
         self.client.force_authenticate(user=self.test_user)

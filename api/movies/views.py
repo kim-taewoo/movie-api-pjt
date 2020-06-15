@@ -179,6 +179,18 @@ class MovieDetailAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class MovieRecommendation(APIView):
+    
+    def get(self, request, movie_id):
+        movie = get_movie(movie_id)
+        if not movie:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        actors = movie.actors.all()[:10]
+        movies = Movie.objects.filter(actors__in=actors).exclude(title=movie.title)[:10]
+        serializer = MovieSerializer(movies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class ReviewAPI(APIView, PaginationHandlerMixin):
     pagination_class = BasicPagination
     serializer_class = ReviewSerializer
