@@ -7,6 +7,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=255)
     sub_title = models.CharField(max_length=255, null=True, blank=True)
     poster = models.URLField(max_length=200)
+    horizontal_poster = models.URLField(max_length=200, null=True, blank=True)
     rating = models.FloatField()
     pub_date = models.DateField()
     runtime = models.IntegerField()
