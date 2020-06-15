@@ -9,7 +9,7 @@ from rest_framework.permissions import AllowAny
 from api.pagination import BasicPagination, PaginationHandlerMixin
 from django.conf import settings
 from .models import Movie, Actor, Director, Genre, Country, Review
-from .serializers import MovieSerializer, ReviewSerializer
+from .serializers import MovieSerializer, ReviewSerializer, ReviewCreateSerializer
 
 
 def get_movie(movie_id):
@@ -30,6 +30,7 @@ def get_review(review_id):
 # Create your views here.
 
 class MovieAPI(APIView, PaginationHandlerMixin):
+    permission_classes = [AllowAny]
     pagination_class = BasicPagination
     serializer_class = MovieSerializer
     
@@ -69,7 +70,7 @@ class MovieAPI(APIView, PaginationHandlerMixin):
         }
 
         year = 1
-        month = 9
+        month = 2
 
         for y in range(0, year):
             for m in range(1, month):
@@ -112,12 +113,24 @@ class MovieAPI(APIView, PaginationHandlerMixin):
                         naver_response = requests.get(self.get_naver_url(
                             title), headers=naver_headers).json()['items'][0]
                         rating = naver_response['userRating']
-                        poster = naver_response['image']
+                        # poster = naver_response['image']
                         link_url = naver_response['link'].strip()
+                        poster_url = link_url.split('=')
+                        poster = 'https://movie.naver.com/movie/bi/mi/photoViewPopup.nhn?movieCode={}'.format(poster_url[1])
                         overview_response = requests.get(link_url)
                         html = overview_response.text
                         soup = BeautifulSoup(html, 'lxml')
                         overview = soup.select('#content > div.article > div.section_group.section_group_frst > div:nth-child(1) > div > div > p')
+
+                        horizontal_url = 'http://www.cgv.co.kr/search/stillcut.aspx?query={}'.format(title)
+                        horizontal_response = requests.get(horizontal_url)
+                        html = horizontal_response.text
+                        soup = BeautifulSoup(html, 'lxml')
+                        horizontal_poster = None
+                        tmp = soup.select('#contents > div > div.cols-content > div.col-detail > div > div.sect-stillcut > ul > li:nth-child(9) > a > img')
+                        if tmp:
+                            horizontal_poster = tmp[0].get('src')
+
                         for i in overview:
                             overview = i.text
 
@@ -153,6 +166,7 @@ class MovieAPI(APIView, PaginationHandlerMixin):
                             title=title,
                             sub_title=sub_title,
                             poster=poster,
+                            horizontal_poster=horizontal_poster,
                             rating=rating,
                             pub_date=pub_date,
                             runtime=runtime,
@@ -187,26 +201,28 @@ class MovieRecommendation(APIView):
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
         actors = movie.actors.all()[:10]
-        movies = Movie.objects.filter(actors__in=actors).exclude(title=movie.title)[:10]
+        genres = movie.genres.all()
+        movies = Movie.objects.filter(actors__in=actors).exclude(title=movie.title)[:4]
+        if len(movies) < 4:
+            new_movies = Movie.objects.filter(genres__in=genres).exclude(title=movie.title)[:4]
+        movies = movies + new_movies
+        movies = movies[:4]
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ReviewAPI(APIView, PaginationHandlerMixin):
-    pagination_class = BasicPagination
-    serializer_class = ReviewSerializer
     
     def get(self, request, movie_id):
         user = request.user
         movie = get_movie(movie_id)
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        reviews = movie.reviews
-        page = self.paginate_queryset(reviews)
-        if page is not None:
-            serializer = self.get_paginated_response(self.serializer_class(page, many=True, context={"request":request}).data)
-        else:
-            serializer = self.serializer_class(reviews, many=True, context={"request":request})
+        reviews = movie.reviews.all()
+        print(reviews)
+        for review in reviews:
+            print(review.creator)
+        serializer = ReviewSerializer(reviews, many=True)
         
         return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -215,11 +231,12 @@ class ReviewAPI(APIView, PaginationHandlerMixin):
         movie = get_movie(movie_id)
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(data=request.data, context={"request":request})
+        serializer = ReviewCreateSerializer(data=request.data)
         if serializer.is_valid():
             review = serializer.save(creator=user, movie=movie)
             if review:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                new_serializer = ReviewSerializer(review)
+                return Response(new_serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -230,10 +247,11 @@ class ReviewDetailAPI(APIView):
         review = get_review(review_id)
         if not review:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = ReviewSerializer(reviews, data=request.data, context={"request":request})
+        serializer = ReviewCreateSerializer(review, data=request.data, context={"request":request})
         if serializer.is_valid():
             review = serializer.save()
             if review:
+                new_serializer = ReviewSerializer(review)
                 return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
         
