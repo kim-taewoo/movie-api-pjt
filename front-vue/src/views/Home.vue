@@ -8,6 +8,7 @@
         <Trailers class="mt-3 mt-sm-0" />
       </v-col>
     </v-row>
+    {{movies.results.length}}
   </div>
 </template>
 
