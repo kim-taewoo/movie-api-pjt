@@ -177,6 +177,9 @@ AUTH_USER_MODEL = 'users.User'
 REST_USE_JWT = True
 ACCOUNT_LOGOUT_ON_GET = True
 
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False
+}
 
 # API_KEYS
 
