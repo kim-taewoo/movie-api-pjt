@@ -1,10 +1,8 @@
 # API DOCS
 
-### Authentication
+### I. Authentication
 ```js
 headers: { 'Authorization': `JWT ${token}` },
 ```
-
-### [User API](./users.md)
-
-### [Movie API](./movies.md)
+### II. [User API](./users.md)
+### III. [Movie API](./movies.md)
