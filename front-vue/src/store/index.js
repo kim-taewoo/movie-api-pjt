@@ -33,6 +33,9 @@ export default new Vuex.Store({
     SET_MOVIES(state, movies) {
       state.movies = movies;
     },
+    SET_MORE_MOVIES(state, movies) {
+      state.movies = [...state.movies, ...movies ]
+    },
     SET_REVIEWS(state, reviews) {
       state.reviews = reviews;
     },
@@ -43,18 +46,18 @@ export default new Vuex.Store({
       state.reviews = [...state.reviews, review];
     },
     DELETE_REVIEW(state, reviewId) {
-      state.reviews = state.reviews.filter((review) => review.id !== reviewId)
+      state.reviews = state.reviews.filter((review) => review.id !== reviewId);
     },
     LIKE_REVIEW(state, reviewId) {
-      const review = state.reviews.find(item=> item.id === reviewId)
+      const review = state.reviews.find((item) => item.id === reviewId);
       if (review.is_liked) {
         review.is_liked = false;
         review.likes_count = review.likes_count - 1;
       } else {
-        review.is_liked = true
+        review.is_liked = true;
         review.likes_count++;
       }
-    }
+    },
   },
   actions: {
     postAuthData({ commit }, info) {
@@ -105,7 +108,21 @@ export default new Vuex.Store({
         });
         const data = await res.data;
         commit('SET_MOVIES', data.results);
-        console.log(data)
+        console.log(data);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    fetchMoreMovies: async function({ commit, getters }, params) {
+      try {
+        const res = await axios.get(SERVER.URL + SERVER.ROUTES.movies, {
+          ...getters.config,
+          ...params,
+        });
+        const data = await res.data;
+        commit('SET_MORE_MOVIES', data.results);
+        console.log(data);
       } catch (err) {
         console.error(err);
       }
@@ -137,8 +154,8 @@ export default new Vuex.Store({
     },
 
     createReview({ getters, commit }, reviewData) {
-      const {movieId, ...reviewDataForm} = reviewData
-      console.log({...reviewData});
+      const { movieId, ...reviewDataForm } = reviewData;
+      console.log({ ...reviewData });
       axios
         .post(
           SERVER.URL + SERVER.ROUTES.movies + movieId + '/reviews/',
@@ -151,13 +168,19 @@ export default new Vuex.Store({
         })
         .catch((err) => console.error(err));
     },
-    deleteReview({getters, commit}, reviewId) {
-      axios.delete(SERVER.URL + SERVER.ROUTES.movies + 'reviews/' + reviewId + '/', getters.config).then((res) => {
-        console.log(res.data);
-        commit('DELETE_REVIEW', reviewId)
-      }).catch((err) => console.error(err))
+    deleteReview({ getters, commit }, reviewId) {
+      axios
+        .delete(
+          SERVER.URL + SERVER.ROUTES.movies + 'reviews/' + reviewId + '/',
+          getters.config
+        )
+        .then((res) => {
+          console.log(res.data);
+          commit('DELETE_REVIEW', reviewId);
+        })
+        .catch((err) => console.error(err));
     },
-    likeReview({getters, commit}, reviewId) {
+    likeReview({ getters, commit }, reviewId) {
       axios
         .get(
           SERVER.URL + SERVER.ROUTES.movies + 'reviews/' + reviewId + '/like/',

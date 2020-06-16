@@ -69,8 +69,8 @@ class MovieAPI(APIView, PaginationHandlerMixin):
             'X-Naver-Client-Secret': NAVER_SECRET,
         }
 
-        year = 1
-        month = 2
+        year = 4
+        month = 4
 
         for y in range(0, year):
             for m in range(1, month):

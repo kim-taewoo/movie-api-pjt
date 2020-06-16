@@ -1,7 +1,7 @@
 <template>
   <v-card color="white">
     <v-tabs light background-color="white" color="grey darken-4" centered>
-      <v-tab @click="onTabClick('-pub_date')">현재상영작</v-tab>
+      <v-tab @click="onTabClick('-pub_date')">최근상영작</v-tab>
       <v-tab @click="onTabClick('-rating')">평점순</v-tab>
       <v-tab @click="onTabClick('-audi_cnt')">관객순</v-tab>
 
