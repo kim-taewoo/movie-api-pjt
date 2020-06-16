@@ -10,7 +10,7 @@
 
         <v-row class="mt-8" justify="center">
           <v-col cols="12" class="d-flex justify-center">
-            <div class="loader">
+            <div ref="loading" class="loader">
               <div class="circle white"></div>
               <div class="circle white"></div>
               <div class="circle white"></div>
@@ -46,6 +46,39 @@ export default {
       });
       this.page = 1;
     },
+    scrollFunction() {
+      const {
+        scrollTop,
+        scrollHeight,
+        clientHeight,
+      } = document.documentElement;
+
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        this.showLoading();
+      }
+    },
+    showLoading: async function () {
+      if (this.isLoading) {
+        return;
+      }
+      this.page++;
+      this.isLoading = true;
+      this.$refs.loading.classList.add('show');
+      try {
+        await this.fetchMoreMovies({
+          params: {
+            page: this.page,
+            order_by: this.type,
+          },
+        }); // <-- key part!!!
+        this.isLoading = false; // only then do we enable further loading
+        this.$refs.loading.classList.remove('show'); // and remove the loader
+      } catch(err) {
+        console.error(err);
+        this.isLoading = false; // only then do we enable further loading
+        this.$refs.loading.classList.remove('show'); // and remove the loader
+      }
+    }
   },
   data() {
     return {
@@ -54,40 +87,12 @@ export default {
       isLoading: false,
     };
   },
-  mounted() {
-    const loading = document.querySelector('.loader');
-    const showLoading = async () => {
-      if (this.isLoading) {
-        return;
-      }
-
-      this.page++;
-      this.isLoading = true;
-      loading.classList.add('show');
-
-      await this.fetchMoreMovies({
-        params: {
-          page: this.page,
-          order_by: this.type,
-        },
-      }); // <-- key part!!!
-
-      this.isLoading = false; // only then do we enable further loading
-      loading.classList.remove('show'); // and remove the loader
-    };
-
-    window.addEventListener('scroll', () => {
-      const {
-        scrollTop,
-        scrollHeight,
-        clientHeight,
-      } = document.documentElement;
-
-      if (scrollTop + clientHeight >= scrollHeight - 10) {
-        showLoading();
-      }
-    });
+  mounted() {    
+    window.addEventListener('scroll', this.scrollFunction);
   },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.scrollFunction)
+  }
 };
 </script>
 
