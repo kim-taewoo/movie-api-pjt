@@ -1,8 +1,13 @@
 <template>
   <v-card outlined flat class="">
+    <div class="text-right">
+      <v-btn @click="onReviewDeleteClick" icon>
+        <v-icon small>mdi-close</v-icon>
+      </v-btn>
+    </div>
     <div class="text-center mt-2">
       <v-rating
-        v-model="rating"
+        v-model="review.rating"
         color="yellow darken-3"
         background-color="grey darken-1"
         empty-icon="$ratingFull"
@@ -10,9 +15,9 @@
         dense
         readonly
       ></v-rating>
-      {{ rating }}
+      {{ review.rating }}
     </div>
-    <v-card-text class="py-1">
+    <v-card-text class="py-1 text-center body-1">
       {{review.content}}
     </v-card-text>
     <v-card-actions class="py-0">
@@ -22,8 +27,8 @@
         </v-list-item-content>
 
         <v-row align="center" justify="end">
-          <v-btn icon color="pink" class="mr-1">
-            <v-icon>mdi-heart</v-icon>
+          <v-btn @click="onReviewLikeClick" icon color="pink" class="mr-1">
+            <v-icon>{{review.is_liked ? 'mdi-heart' : 'mdi-heart-outline'}}</v-icon>
           </v-btn>
           <span class="subheading mr-2">{{review.likes_count}}</span>
         </v-row>
@@ -33,13 +38,18 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 export default {
   props: ['review'],
   data: () => ({
   }),
-  computed: {
-    rating() {
-      return this.review.rating
+  methods: {
+    ...mapActions(['deleteReview', 'likeReview']),
+    onReviewDeleteClick() {
+      this.deleteReview(this.review.id)
+    },
+    onReviewLikeClick() {
+      this.likeReview(this.review.id)
     }
   }
 };

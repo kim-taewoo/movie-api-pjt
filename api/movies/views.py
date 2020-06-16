@@ -10,7 +10,7 @@ from api.pagination import BasicPagination, PaginationHandlerMixin
 from django.conf import settings
 from .models import Movie, Actor, Director, Genre, Country, Review
 from .serializers import MovieSerializer, ReviewSerializer, ReviewCreateSerializer
-
+from django.db.models import Q
 
 def get_movie(movie_id):
     try:
@@ -54,7 +54,7 @@ class MovieAPI(APIView, PaginationHandlerMixin):
             serializer = self.get_paginated_response(self.serializer_class(page, many=True).data)
         else:
             serializer = self.serializer_class(movies, many=True)
-        pp(serializer.data)
+        # pp(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -210,7 +210,7 @@ class MovieRecommendation(APIView):
         actors = movie.actors.all()[:10]
         genres = movie.genres.all()
         # movies = Movie.objects.filter(actors__in=actors).exclude(title=movie.title)[:4]
-        movies = Movie.objects.filter(Q(actors__in=actors)|Q(genres__in=genres)).exclude(title=movie.title)[:4]
+        movies = Movie.objects.filter(Q(actors__in=actors)|Q(genres__in=genres)).exclude(title=movie.title).filter().distinct()[:4]
         if len(movies) < 4:
             movies = Movie.objects.all()[:4]
         serializer = MovieSerializer(movies, many=True)

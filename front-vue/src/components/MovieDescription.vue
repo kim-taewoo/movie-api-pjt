@@ -31,7 +31,7 @@
         >
           <template v-slot:activator="{ on }">
             <v-chip class="ma-1" label color="indigo" text-color="white" v-on="on">
-              {{chip.key}} (더보기)
+              {{chip.key}} (전체보기)
             </v-chip>
           </template>
           <v-card width="300">
@@ -71,9 +71,9 @@
 <script>
 export default {
   props: ['movie'],
-  data() {
-    return {
-      chips: [
+  computed: {
+    chips() {
+      return [
         {
           key: '장르',
           color: 'indigo',
@@ -114,7 +114,11 @@ export default {
           color: 'indigo',
           values: this.movie.actors,
         },
-      ],
+      ]
+    }
+  },
+  data() {
+    return {
     };
   },
 };

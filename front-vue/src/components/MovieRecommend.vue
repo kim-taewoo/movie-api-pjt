@@ -2,7 +2,7 @@
   <v-card class="pa-4" light>
     <v-card-title class="pa-0">Ai 추천</v-card-title>
     <v-row dense>
-      <v-col v-for="(recommend, idx) in recommends" :key="idx" cols="3">
+      <v-col v-for="(recommend, idx) in recommends" :key="idx" cols="6" md="3">
         <v-hover v-slot:default="{ hover }">
           <v-card
             class="recommendItem"

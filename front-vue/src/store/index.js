@@ -42,6 +42,19 @@ export default new Vuex.Store({
     ADD_REVIEW(state, review) {
       state.reviews = [...state.reviews, review];
     },
+    DELETE_REVIEW(state, reviewId) {
+      state.reviews = state.reviews.filter((review) => review.id !== reviewId)
+    },
+    LIKE_REVIEW(state, reviewId) {
+      const review = state.reviews.find(item=> item.id === reviewId)
+      if (review.is_liked) {
+        review.is_liked = false;
+        review.likes_count = review.likes_count - 1;
+      } else {
+        review.is_liked = true
+        review.likes_count++;
+      }
+    }
   },
   actions: {
     postAuthData({ commit }, info) {
@@ -135,6 +148,24 @@ export default new Vuex.Store({
         .then((res) => {
           console.log(res.data);
           commit('ADD_REVIEW', res.data);
+        })
+        .catch((err) => console.error(err));
+    },
+    deleteReview({getters, commit}, reviewId) {
+      axios.delete(SERVER.URL + SERVER.ROUTES.movies + 'reviews/' + reviewId + '/', getters.config).then((res) => {
+        console.log(res.data);
+        commit('DELETE_REVIEW', reviewId)
+      }).catch((err) => console.error(err))
+    },
+    likeReview({getters, commit}, reviewId) {
+      axios
+        .get(
+          SERVER.URL + SERVER.ROUTES.movies + 'reviews/' + reviewId + '/like/',
+          getters.config
+        )
+        .then((res) => {
+          console.log(res.data);
+          commit('LIKE_REVIEW', reviewId);
         })
         .catch((err) => console.error(err));
     },
