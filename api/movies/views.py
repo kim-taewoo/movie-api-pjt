@@ -225,11 +225,7 @@ class ReviewAPI(APIView, PaginationHandlerMixin):
         if not movie:
             return Response(status=status.HTTP_404_NOT_FOUND)
         reviews = movie.reviews.all()
-        print(reviews)
-        for review in reviews:
-            print(review.creator)
-        serializer = ReviewSerializer(reviews, many=True)
-        
+        serializer = ReviewSerializer(reviews, many=True, context={"request":request})
         return Response(serializer.data, status=status.HTTP_200_OK)
         
     def post(self, request, movie_id):
@@ -241,7 +237,7 @@ class ReviewAPI(APIView, PaginationHandlerMixin):
         if serializer.is_valid():
             review = serializer.save(creator=user, movie=movie)
             if review:
-                new_serializer = ReviewSerializer(review)
+                new_serializer = ReviewSerializer(review, context={"request":request})
                 return Response(new_serializer.data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
