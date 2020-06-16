@@ -36,7 +36,12 @@
 
 ## ENVIRONMENT
 ### FRONT
-- Vue
+- Vue (2.6.11)
+- Vuex (3.4.0)
+- Vuetify (2.2.11)
+- Vue Router (3.2.0)
+- Vue cookies (1.7.0)
+- Axios (0.19.2)
 
 ### BACK
 - Django (2.1.15)
