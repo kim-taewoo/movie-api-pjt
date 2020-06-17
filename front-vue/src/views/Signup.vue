@@ -39,6 +39,7 @@
                     label="Password Check*"
                     type="password"
                     required
+                    @keypress.enter="signup(signupData)"
                   ></v-text-field>
                 </v-col>
               </v-row>

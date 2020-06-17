@@ -3,9 +3,9 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import Movies from '../views/Movies.vue';
 import MovieDetail from '@/views/MovieDetail';
-import Login from '@/views/Login'
-import Signup from '@/views/Signup'
-import MovieTrailer from '@/views/MovieTrailer'
+import Login from '@/views/Login';
+import Signup from '@/views/Signup';
+import MovieTrailer from '@/views/MovieTrailer';
 import store from '../store';
 
 Vue.use(VueRouter);
@@ -35,14 +35,14 @@ const routes = [
     path: '/movies/:id',
     name: 'MovieDetail',
     component: MovieDetail,
-    props: true
+    props: true,
   },
   {
     path: '/trailer',
     name: 'MovieTrailer',
     component: MovieTrailer,
-    props: true
-  }
+    props: true,
+  },
 ];
 
 const router = new VueRouter({
@@ -59,9 +59,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = store.getters.isLoggedIn
-  if (to.name !== 'Login' && !isAuthenticated) next({ name: 'Login' });
-  else next();
+  const isAuthenticated = store.getters.isLoggedIn;
+  console.log(isAuthenticated);
+  if (isAuthenticated) {
+    next()
+  } else {
+    if (to.name === 'Login' || to.name === 'Signup') next()
+    else next({name: 'Login'})
+  }
 });
 
 export default router;

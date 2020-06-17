@@ -28,6 +28,7 @@
                     label="Password*"
                     type="password"
                     required
+                    @keypress.enter="login(loginData)"
                   ></v-text-field>
                 </v-col>
               </v-row>
