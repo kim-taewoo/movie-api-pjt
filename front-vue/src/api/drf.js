@@ -1,5 +1,5 @@
 export default {
-  URL: 'http://localhost:8000',
+  URL: 'http://ec2-18-222-172-28.us-east-2.compute.amazonaws.com:8000',
   ROUTES: {
     signup: '/rest-auth/registration/',
     login: '/rest-auth/login/',
