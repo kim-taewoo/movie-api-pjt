@@ -19,7 +19,7 @@
 
 ## WEBSITE
 
-### 웹사이트 주소
+### 웹사이트 주소 : http://ec2-18-222-172-28.us-east-2.compute.amazonaws.com/login
 
 <br>
 
@@ -31,6 +31,11 @@
 <br>
 
 ## [API Documentation](api/docs/README.md)
+
+<br>
+
+## Architecture
+![](assets/모양%202.png)
 
 <br>
 
