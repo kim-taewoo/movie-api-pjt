@@ -13,7 +13,7 @@ django-rest-framework==0.1.0
 djangorestframework==3.11.0
 djangorestframework-jwt==1.11.0
 idna==2.9
-lxml==4.5.1
+lxml==4.6.3
 oauthlib==3.1.0
 PyJWT==1.7.1
 python3-openid==3.1.0
